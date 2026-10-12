@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Smoothy.Api/Smoothy.Api.csproj" />
+    <Project Path="src/Smoothy.Domain/Smoothy.Domain.csproj" />
+    <Project Path="src/Smoothy.Infrastructure/Smoothy.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Smoothy.Tests/Smoothy.Tests.csproj" />
+  </Folder>
+</Solution>
