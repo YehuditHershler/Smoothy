@@ -1,10 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using Smoothy.Infrastructure;
+using Microsoft.OpenApi;
+using System.Text.Json.Nodes;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // TimeOnly הוא שעה בלי אזור זמן: דוגמה "09:00:00" ולא עם Z
+    options.MapType<TimeOnly>(() => new OpenApiSchema
+    {
+        Type = JsonSchemaType.String,
+        Example = JsonValue.Create("09:00:00")
+    });
+});
 
 builder.Services.AddControllers();
 

@@ -8,7 +8,7 @@ namespace Smoothy.Api.Controllers;
 
 [ApiController]
 [Route("api/services")]
-public class ServicesController(SmoothyDbContext db) : ControllerBase
+public class ServicesController(SmoothyDbContext db,  ICurrentBusinessProvider currentBusiness) : ControllerBase
 {
     /// <summary>GET /api/services - כל השירותים הפעילים של העסק (מסונן אוטומטית לפי BusinessId).</summary>
     [HttpGet]
@@ -26,7 +26,7 @@ public class ServicesController(SmoothyDbContext db) : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ServiceDto>> GetById(Guid id)
     {
-        var service = await db.Services.FindAsync(id);
+        var service = await db.Services.FirstOrDefaultAsync(s => s.Id == id);
         if (service is null) return NotFound();
 
         return Ok(ServiceDto.FromEntity(service));
@@ -48,10 +48,12 @@ public class ServicesController(SmoothyDbContext db) : ControllerBase
         if (request.Price < 0)
             return BadRequest("Price cannot be negative.");
 
+         var businessId = currentBusiness.BusinessId;
+        if (businessId is null) return Unauthorized();
+
         var service = new Service
         {
-            // TODO: להחליף ב-BusinessId אמיתי מתוך ה-Auth כשהוא יהיה קיים
-            BusinessId = TestBusinessId,
+            BusinessId = businessId.Value,
             Name = request.Name,
             Description = request.Description,
             Category = request.Category,
@@ -68,6 +70,4 @@ public class ServicesController(SmoothyDbContext db) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = service.Id }, ServiceDto.FromEntity(service));
     }
 
-    /// <summary>Guid קבוע זמני, רק לבדיקות ידניות לפני שיש Auth אמיתי.</summary>
-    public static readonly Guid TestBusinessId = Guid.Parse("11111111-1111-1111-1111-111111111111");
 }
