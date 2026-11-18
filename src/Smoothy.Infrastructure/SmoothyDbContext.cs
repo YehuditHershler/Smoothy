@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Smoothy.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Smoothy.Infrastructure.Identity;
 
 namespace Smoothy.Infrastructure;
 
@@ -15,10 +18,9 @@ public interface ICurrentBusinessProvider
 
 public class SmoothyDbContext(
     DbContextOptions<SmoothyDbContext> options,
-    ICurrentBusinessProvider currentBusiness) : DbContext(options)
+    ICurrentBusinessProvider currentBusiness) : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options)
 {
     public DbSet<Business> Businesses => Set<Business>();
-    public DbSet<User> Users => Set<User>();
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Location> Locations => Set<Location>();
     public DbSet<Service> Services => Set<Service>();
@@ -33,7 +35,6 @@ public class SmoothyDbContext(
         // --- Global Query Filter: כל שאילתה על ישות שיש לה BusinessId
         // תסונן אוטומטית לפי העסק של המשתמש המחובר. כך גם אם מישהו ישכח
         // Where(x => x.BusinessId == ...) בקוד, לא תהיה דליפת מידע בין עסקים.
-        modelBuilder.Entity<User>().HasQueryFilter(e => e.BusinessId == currentBusiness.BusinessId);
         modelBuilder.Entity<Customer>().HasQueryFilter(e => e.BusinessId == currentBusiness.BusinessId);
         modelBuilder.Entity<Location>().HasQueryFilter(e => e.BusinessId == currentBusiness.BusinessId);
         modelBuilder.Entity<Service>().HasQueryFilter(e => e.BusinessId == currentBusiness.BusinessId);

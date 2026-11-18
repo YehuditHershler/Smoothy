@@ -12,5 +12,4 @@ public class Business
     public string? Phone { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
  
-    public List<User> Users { get; set; } = [];
 }
