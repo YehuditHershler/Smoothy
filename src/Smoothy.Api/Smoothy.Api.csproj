@@ -1,9 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>c063cea8-1aa2-4ccb-a827-82fe52739684</UserSecretsId>
+    <UserSecretsId>smoothy-api-secrets</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
