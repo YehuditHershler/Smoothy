@@ -21,18 +21,29 @@ builder.Services.AddSwaggerGen(options =>
         Type = JsonSchemaType.String,
         Example = JsonValue.Create("09:00:00")
     });
+    
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+    });
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+    });
 });
 
 builder.Services.AddControllers();
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<SmoothyDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
-builder.Services.AddScoped<ICurrentBusinessProvider, DesignTimeCurrentBusinessProvider>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentBusinessProvider, CurrentBusinessProvider>();
 
 // --- Identity: ניהול משתמשות וסיסמאות (ללא UI, רק ה-API) ---
 builder.Services
@@ -89,6 +100,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers().RequireAuthorization();
+
+//app.MapControllers();
 
 app.Run();

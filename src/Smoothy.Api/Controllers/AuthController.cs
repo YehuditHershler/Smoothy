@@ -22,6 +22,7 @@ public class AuthController(SmoothyDbContext db,
     /// <summary>
     /// POST /api/auth/login - מחזיר Token. הסיסמה נשלחת ב-body ולא ב-URL.
     /// </summary>
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
     {
@@ -61,6 +62,7 @@ public class AuthController(SmoothyDbContext db,
     /// <summary>
     /// POST /api/auth/register - יוצר עסק + משתמשת בעלת עסק בטרנזקציה אחת.
     /// </summary>
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponse>> Register(RegisterBusinessRequest request)
     {

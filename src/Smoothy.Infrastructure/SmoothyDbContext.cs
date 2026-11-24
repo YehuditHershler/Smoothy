@@ -53,16 +53,4 @@ public class SmoothyDbContext(
     }
 }
 
-/// <summary>
-/// מימוש זמני לפיתוח מוקדם/בדיקות - מחזיר תמיד null (כלומר בלי סינון).
-/// יוחלף בשלב ה-Auth במימוש אמיתי שקורא BusinessId מתוך ה-JWT של המשתמש המחובר.
-/// </summary>
-// public class DesignTimeCurrentBusinessProvider : ICurrentBusinessProvider
-// {
-//     public Guid? BusinessId => null;
-// }
 
-public class DesignTimeCurrentBusinessProvider : ICurrentBusinessProvider
-{
-    public Guid? BusinessId => Guid.Parse("11111111-1111-1111-1111-111111111111");
-}
